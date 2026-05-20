@@ -1,0 +1,31 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # ១. ទាញយកកូដពី GitHub មកដុត
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # ២. ភ្ជាប់ទៅកាន់ Docker Hub Cloud
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: neat67
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    # ៣. បញ្ជាឱ្យបង្កើត និងរុញទៅ Docker Hub ស្វ័យប្រវត្ត
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: neat67/final_devops:latest
